@@ -1,0 +1,64 @@
+service: cognito-auth-system
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: ap-south-1
+
+plugins:
+  - serverless-esbuild
+  - serverless-offline
+
+custom:
+  esbuild:
+    bundle: true
+    minify: false
+    sourcemap: true
+    target: node18
+    platform: node
+
+functions:
+  signup:
+    handler: src/functions/signup/handler.handler
+    events:
+      - http:
+          path: auth/signup
+          method: post
+          cors: true
+  verifyOtp:
+    handler: src/functions/verify-otp/handler.handler
+    events:
+      - http:
+          path: auth/verify
+          method: post
+          cors: true
+
+  resendOtp:
+    handler: src/functions/resend-otp/handler.handler
+    events:
+      - http:
+          path: auth/resend-otp
+          method: post
+          cors: true
+  login:
+    handler: src/functions/login/handler.handler
+    events:
+      - http:
+          path: auth/login
+          method: post
+          cors: true
+
+  forgotPassword:
+    handler: src/functions/forgot-password/handler.handler
+    events:
+      - http:
+          path: auth/forgot-password
+          method: post
+          cors: true
+  resetPassword:
+    handler: src/functions/reset-password/handler.handler
+    events:
+      - http:
+          path: auth/reset-password
+          method: post
+          cors: true
