@@ -1,13 +1,22 @@
 service: cognito-auth-system
-
+useDotenv: true
 provider:
   name: aws
   runtime: nodejs18.x
   region: ap-south-1
+  environment:
+    COGNITO_CLIENT_ID: ${env:COGNITO_CLIENT_ID}
+    COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}
+
+    DB_HOST: ${env:DB_HOST}
+    DB_PORT: ${env:DB_PORT}
+    DB_USERNAME: ${env:DB_USERNAME}
+    DB_PASSWORD: ${env:DB_PASSWORD}
+    DB_NAME: ${env:DB_NAME}
 
 plugins:
   - serverless-esbuild
-  - serverless-offline
+  # - serverless-offline
 
 custom:
   esbuild:
@@ -24,14 +33,24 @@ functions:
       - http:
           path: auth/signup
           method: post
-          cors: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: false
   verifyOtp:
     handler: src/functions/verify-otp/handler.handler
     events:
       - http:
           path: auth/verify
           method: post
-          cors: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: false
 
   resendOtp:
     handler: src/functions/resend-otp/handler.handler
@@ -39,14 +58,24 @@ functions:
       - http:
           path: auth/resend-otp
           method: post
-          cors: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: false
   login:
     handler: src/functions/login/handler.handler
     events:
       - http:
           path: auth/login
           method: post
-          cors: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: false
 
   forgotPassword:
     handler: src/functions/forgot-password/handler.handler
@@ -54,11 +83,21 @@ functions:
       - http:
           path: auth/forgot-password
           method: post
-          cors: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: false
   resetPassword:
     handler: src/functions/reset-password/handler.handler
     events:
       - http:
           path: auth/reset-password
           method: post
-          cors: true
+          cors:
+            origin: "*"
+            headers:
+              - Content-Type
+              - Authorization
+            allowCredentials: false

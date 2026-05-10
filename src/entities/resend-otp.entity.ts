@@ -7,11 +7,13 @@ export class ResendOtpTracking {
 
   @Column({
     unique: true,
+    type: "varchar",
   })
   email!: string;
 
   @Column({
     default: 0,
+    type: "int",
   })
   resend_count!: number;
   @Column({

@@ -5,29 +5,39 @@ export const authService = {
   async signup(data: any) {
     const { name, email, password } = data;
 
-    await cognitoClient.send(
-      new SignUpCommand({
-        ClientId: CLIENT_ID,
+    try {
+      await cognitoClient.send(
+        new SignUpCommand({
+          ClientId: CLIENT_ID,
+          Username: email,
+          Password: password,
+          UserAttributes: [
+            {
+              Name: "name",
+              Value: name,
+            },
+            {
+              Name: "email",
+              Value: email,
+            },
+          ],
+        }),
+      );
 
-        Username: email,
-        Password: password,
+      return {
+        message: "OTP sent successfully",
+      };
+    } catch (error: any) {
+      if (error.name === "UsernameExistsException") {
+        throw new Error("User already exists");
+      }
 
-        UserAttributes: [
-          {
-            Name: "name",
-            Value: name,
-          },
-          {
-            Name: "email",
-            Value: email,
-          },
-        ],
-      }),
-    );
+      if (error.name === "InvalidPasswordException") {
+        throw new Error("Password must contain uppercase, lowercase, number and special character");
+      }
 
-    return {
-      message: "OTP sent successfully",
-    };
+      throw new Error("Something went wrong");
+    }
   },
 
   async verifyOtp(data: any) {

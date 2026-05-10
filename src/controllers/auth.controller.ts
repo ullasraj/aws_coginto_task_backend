@@ -8,7 +8,7 @@ export const signupController = async (event: any) => {
     const body = JSON.parse(event.body);
 
     const result = await authService.signup(body);
-    return successResponse(result, HTTP_STATUS.OK);
+    return successResponse(result, HTTP_STATUS.CREATED);
   } catch (error: any) {
     return errorResponse(error.message);
   }
