@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { ResendConfirmationCodeCommand } from "@aws-sdk/client-cognito-identity-provider";
 
 import { cognito } from "./cognito.service";
